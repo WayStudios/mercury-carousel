@@ -1,0 +1,34 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/iron-image/iron-image.html">
+<dom-module id="mercury-carousel-video-slide">
+  <template>
+    <style>
+    :host {
+      display: inline-block;
+      width: var(--mercury-carousel-slide-width, auto);
+      height: var(--mercury-carousel-slide-height, auto);
+      @apply(--mercury-carousel-slide);
+    }
+    #slideVideo {
+      width: 100%;
+      height: auto;
+    }
+    </style>
+    <neon-animatable>
+      <video id="slideVideo" src="{{src}}"></video>
+    </neon-animatable>
+  </template>
+  <script>
+  Polymer({
+    is: 'mercury-carousel-video-slide',
+    properties: {
+      src: {
+        type: String
+      },
+      href: {
+        type: String
+      }
+    }
+  });
+  </script>
+</dom-module>

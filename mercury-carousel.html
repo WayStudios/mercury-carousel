@@ -1,0 +1,101 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../neon-animation/neon-animatable.html">
+<link rel="import" href="../neon-animation/neon-animations.html">
+<link rel="import" href="mercury-carousel-image-slide.html">
+<link rel="import" href="mercury-carousel-video-slide.html">
+<dom-module id="mercury-carousel">
+  <template>
+    <style>
+      :host {
+        position: relative;
+        display: block;
+      }
+
+      #slideSelector {
+        display: block;
+      }
+
+    </style>
+    <neon-animated-pages id="slides" selected="{{selected}}" entry-animation="slide-from-right-animation" exit-animation="slide-left-animation">
+      <content select=".carousel-slide"></content>
+    </neon-animated-pages>
+  </template>
+  <script>
+    Polymer({
+      is: 'mercury-carousel',
+      behaviors: [
+        Polymer.IronResizableBehavior
+      ],
+      properties: {
+        width: {
+          type: Number,
+          value: 0
+        },
+        height: {
+          type: Number,
+          value: 0
+        },
+        responsive: {
+          type: Boolean,
+          reflectToAttribute: true
+        },
+        selected: {
+          type: String,
+          notify: true
+        }
+      },
+      listeners: {
+        'iron-resize': '_onIronResize'
+      },
+      created: function() {},
+      ready: function() {},
+      attached: function() {
+        this.aspectRatio = this.width / this.height;
+        var children = Polymer.dom(this).children;
+        for (var i = 0; i < children.length; ++i) {
+          var child = children[i];
+        }
+        var slide = Polymer.dom(this).children[this.selected];
+        this._prepareSlide(slide);
+      },
+      get parent() {
+        if (this.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+          return this.parentNode.host;
+        }
+        return this.parentNode;
+      },
+      get aspectRatio() {
+        return this.width / this.height;
+      },
+      _onIronResize: function() {
+        if (this.responsive) {
+          var width = this.parent.offsetWidth;
+          var height = width / this.aspectRatio;
+          this.style.height = height + 'px';
+        } else {
+          this.style.width = this.width + 'px';
+          this.style.height = this.height + 'px';
+        }
+      },
+      _prepareSlide: function(slide) {
+        if (slide.nodeName == 'MERCURY-CAROUSEL-IMAGE-SLIDE') {
+          this.async(this.nextSlide, 4000);
+        } else if (slide.nodeName == 'MERCURY-CAROUSEL-VIDEO-SLIDE') {
+          var video = slide.$$("#slideVideo");
+          video.onended = function(event) {
+            this.nextSlide();
+          }.bind(this);
+          video.play();
+        }
+      },
+      nextSlide: function() {
+        var prev = Polymer.dom(this).children[this.selected];
+        this.$$("#slides").selectNext();
+        var slide = Polymer.dom(this).children[this.selected];
+        this._prepareSlide(slide);
+      }
+    });
+  </script>
+</dom-module>
