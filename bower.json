@@ -13,16 +13,15 @@
     "carousel",
     "slideshow"
   ],
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/WayStudios/mercury-carousel.git"
   },
   "main": "mercury-carousel.html",
   "dependencies": {
-    "iron-image": "PolymerElements/iron-image#^1.0.0",
     "iron-image": "PolymerElements/iron-resizable-behavior#^1.0.0",
     "neon-animation": "PolymerElements/neon-animation#^1.0.0",
     "polymer": "Polymer/polymer#^1.1.0"
-  }
+  },
+  "ignore": []
 }
